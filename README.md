@@ -26,6 +26,20 @@ A fast, simple, client-side web application to visualize [FlatGeobuf](https://fl
 
 A default dataset is loaded on startup for demonstration.
 
+## Data 
+
+- NUTS3 areas downloaded from https://ec.europa.eu/eurostat/web/gisco/geodata/statistical-units/territorial-units-statistics
+- Quickly processed and filtered with GeoPandas:
+
+```python
+import geopandas as gpd
+gdf = gpd.read_file("NUTS_RG_01M_2024_3857.geojson")
+gdf[
+    (gdf["CNTR_CODE"].isin(["IT","DE","AT","CH","HR","SI","MC","SM","FR", "LI"])) & # random list of countries
+    (gdf["LEVL_CODE"] == 3)
+    ].to_crs("4326").to_file("EU_NUTS3_01M.fgb")
+```
+
 ## Technology Stack
 
 -   [FlatGeobuf](https://github.com/flatgeobuf/flatgeobuf) - For deserializing `.fgb` files.
