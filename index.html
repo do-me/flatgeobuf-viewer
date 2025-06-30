@@ -1,8 +1,13 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlatGeobuf Viewer | Interactive .fgb File Visualization</title>
+    <meta name="description" content="A fast, free, and open-source in-browser tool to visualize FlatGeobuf (.fgb) files. Drag and drop your geospatial data to view it on an interactive map, inspect properties, and see metadata.">
+    <meta name="keywords" content="FlatGeobuf, FGB, viewer, map, geospatial, GIS, geojson, maplibre, open source, data visualization, Dominik Weckmüller">
+    <meta name="author" content="Dominik Weckmüller">
+    
     <link href="https://unpkg.com/maplibre-gl@3.3.1/dist/maplibre-gl.css" rel="stylesheet" />
     <script src="https://unpkg.com/maplibre-gl@3.3.1/dist/maplibre-gl.js"></script>
     <script src="https://unpkg.com/flatgeobuf@3.32.0/dist/flatgeobuf-geojson.min.js"></script>
@@ -54,10 +59,24 @@
 </div>
 
 <div class="min-h-screen p-4">
-    <!-- Header -->
+
+    <div class="relative max-w-7xl mx-auto mb-8 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+        <!-- GitHub Icon Link -->
+        <a href="https://github.com/do-me/flatgeobuf-viewer" target="_blank" rel="noopener noreferrer" title="View on GitHub" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors">
+            <svg role="img" viewBox="0 0 24 24" class="w-7 h-7" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+            </svg>
+        </a>
+
+    <!-- Header & App Description -->
     <div class="text-center mb-8">
         <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">FlatGeobuf Visualizer</h1>
         <p class="text-lg text-gray-600 dark:text-gray-300">Interactive geospatial data visualization</p>
+    </div>
+        <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-center">
+            This interactive <strong>FlatGeobuf Viewer</strong> allows you to quickly load and explore <strong>.fgb files</strong> directly in your browser. Simply drag and drop your file to see it on an interactive map. View feature properties, inspect file metadata, and switch between light and dark modes for comfortable viewing.
+            This is a powerful, client-side tool for GIS professionals, developers, and data enthusiasts who need a fast way to preview FlatGeobuf datasets without any server-side setup.
+        </p>
     </div>
 
     <!-- Main Content -->
@@ -88,18 +107,14 @@
                 
                 <input type="file" id="fileInput" accept=".fgb" class="hidden">
                 
-                <!-- Loading State -->
                 <div id="loading" class="hidden text-center py-6">
                     <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mb-4"></div>
                     <p class="text-gray-600 dark:text-gray-400">Processing your data...</p>
                 </div>
 
-                <!-- File Info -->
                 <div id="fileInfo" class="hidden mt-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
                     <h4 class="font-medium text-green-800 dark:text-green-300 mb-2 flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         File Loaded
                     </h4>
                     <p id="fileName" class="text-sm text-green-700 dark:text-green-400"></p>
@@ -110,12 +125,9 @@
             <!-- Statistics Card -->
             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                    <svg class="w-5 h-5 mr-2 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                    </svg>
+                     <svg class="w-5 h-5 mr-2 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                     Statistics
                 </h3>
-                
                 <div class="grid grid-cols-2 gap-4">
                     <div class="text-center p-4 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
                         <div id="featureCount" class="text-2xl font-bold text-blue-600 dark:text-blue-400">0</div>
@@ -131,19 +143,23 @@
             <!-- Metadata Card -->
             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                    <svg class="w-5 h-5 mr-2 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                    </svg>
+                    <svg class="w-5 h-5 mr-2 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                     Metadata
                 </h3>
-                
                 <div id="headerContent" class="max-h-64 overflow-y-auto bg-gray-50 dark:bg-gray-900 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
                     <p class="text-gray-500 dark:text-gray-400 italic text-sm">Load a FlatGeobuf file to see metadata</p>
                 </div>
             </div>
         </div>
     </div>
+    
+    <!-- Footer -->
+    <footer class="text-center py-8 text-sm text-gray-500 dark:text-gray-400">
+        <p class="mb-1">Developed by Dominik Weckmüller.</p>
+        <p>This viewer is derived from the <a href="https://flatgeobuf.org/examples/maplibre/" target="_blank" rel="noopener noreferrer" class="text-primary-500 hover:underline">FlatGeobuf.org MapLibre example</a>.</p>
+        <p><a href="https://github.com/do-me/flatgeobuf-viewer" target="_blank" rel="noopener noreferrer" class="text-primary-500 hover:underline">View on GitHub</a></p>
+    </footer>
+
 </div>
 <script src="main.js"></script>
 </body>
